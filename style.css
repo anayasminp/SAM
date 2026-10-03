@@ -1,0 +1,22 @@
+html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+  .screen { transition: opacity .7s ease, transform .7s ease, visibility .7s; }
+  .screen-hidden { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(24px); position: absolute; inset: 0; z-index: 0; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1.1s ease, transform 1.1s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .eyelid-top { transform-origin: top; transition: transform 1.6s cubic-bezier(.6,0,.2,1) .5s; }
+  .eyelid-bottom { transform-origin: bottom; transition: transform 1.6s cubic-bezier(.6,0,.2,1) .5s; }
+  .splash.open .eyelid-top { transform: scaleY(0); }
+  .splash.open .eyelid-bottom { transform: scaleY(0); }
+  .splash.open .eye-logo { animation: holdEye 1.2s ease 2.2s forwards; }
+  @keyframes holdEye { to { transform: translateX(calc(-50vw + 5rem)) scale(.55); } }
+  .splash.open .splash-content { opacity: 0; transition: opacity 1s ease 2.4s; }
+  .scene { transition: opacity .8s ease, transform .8s ease; }
+  .scene-off { opacity: 0; transform: translateY(20px); pointer-events: none; }
+  .countup { font-variant-numeric: tabular-nums; }
+  button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #A9896B; outline-offset: 2px; }
+  .reduce-motion *, .reduce-motion *::before { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+    html { scroll-behavior: auto; }
+  }
