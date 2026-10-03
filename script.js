@@ -1,180 +1,451 @@
-const screens = ['s-welcome','s-input','s-check','s-story','s-brand'];
-let dailyMinutes = 0, sceneIndex = 0, scenes = [];
+
+const screens = ['s-welcome', 's-input', 's-check', 's-story', 's-brand'];
+
+let dailyMinutes = 0;
+let sceneIndex = 0;
+let scenes = [];
 let portalOpened = false;
 let splashTimers = [];
+let sceneTimer = null;
+let sceneLockTimer = null;
+let sceneLocked = false;
+let brandTimers = [];
 
-function clearSplashTimers(){
+const $ = id => document.getElementById(id);
+
+function bind(id, event, callback) {
+  const el = $(id);
+  if (el) el.addEventListener(event, callback);
+}
+
+function clearSplashTimers() {
   splashTimers.forEach(t => clearTimeout(t));
   splashTimers = [];
 }
 
-function removeSplash(instant){
-  const sp = document.getElementById('splash');
-  if (!sp) return;
-  
-  sp.classList.add('pointer-events-none');
-  if (instant) { sp.remove(); return; }
-  sp.style.transition = 'opacity 0.7s ease, visibility 0.7s';
-  sp.style.opacity = 0;
-  sp.style.visibility = 'hidden';
-  sp.style.pointerEvents = 'none';
-  setTimeout(() => sp.remove(), 800);
+function clearSceneTimers() {
+  if (sceneTimer) clearTimeout(sceneTimer);
+  if (sceneLockTimer) clearTimeout(sceneLockTimer);
+
+  sceneTimer = null;
+  sceneLockTimer = null;
+  sceneLocked = false;
 }
 
-function show(id){
-  screens.forEach(s => {
-    const el = document.getElementById(s);
-    if (s === id) { el.classList.remove('screen-hidden'); el.style.opacity = ''; }
-    else el.classList.add('screen-hidden');
+function clearBrandTimers() {
+  brandTimers.forEach(t => clearTimeout(t));
+  brandTimers = [];
+}
+
+function removeSplash(instant = false) {
+  const sp = $('splash');
+  if (!sp) return;
+
+  sp.classList.add('pointer-events-none');
+
+  if (instant) {
+    sp.remove();
+    return;
+  }
+
+  sp.style.transition = 'opacity 0.7s ease, visibility 0.7s';
+  sp.style.opacity = '0';
+  sp.style.visibility = 'hidden';
+  sp.style.pointerEvents = 'none';
+
+  setTimeout(() => {
+    if (sp.parentNode) sp.remove();
+  }, 800);
+}
+
+function show(id) {
+  screens.forEach(screenId => {
+    const el = $(screenId);
+    if (!el) return;
+
+    if (screenId === id) {
+      el.classList.remove('screen-hidden');
+      el.style.opacity = '';
+    } else {
+      el.classList.add('screen-hidden');
+    }
   });
 }
 
-function parseTime(){
-  const h = parseInt(document.getElementById('time-h').value) || 0;
-  const m = parseInt(document.getElementById('time-m').value) || 0;
-  return h * 60 + m;
+function parseTime() {
+  const hours = parseInt($('time-h')?.value, 10) || 0;
+  const minutes = parseInt($('time-m')?.value, 10) || 0;
+
+  if (hours < 0 || minutes < 0 || minutes > 59) return -1;
+
+  return hours * 60 + minutes;
 }
 
-function fmt(mins){
-  const h = Math.floor(mins / 60), m = mins % 60;
-  if (h && m) return h + 'h' + String(m).padStart(2,'0');
-  if (h) return h + ' horas';
-  return m + ' minutos';
+function fmt(mins) {
+  mins = Math.max(0, Math.round(mins));
+
+  const hours = Math.floor(mins / 60);
+  const minutes = mins % 60;
+
+  if (hours && minutes) {
+    return hours + 'h' + String(minutes).padStart(2, '0');
+  }
+
+  if (hours) return hours + (hours === 1 ? ' hora' : ' horas');
+
+  return minutes + (minutes === 1 ? ' minuto' : ' minutos');
 }
 
-function fmtH(mins){
-  return Math.round(mins / 60).toLocaleString('pt-BR') + ' horas';
+function fmtH(mins) {
+  const hours = Math.round(mins / 60);
+  return hours.toLocaleString('pt-BR') +
+    (hours === 1 ? ' hora' : ' horas');
 }
 
-const nf = n => n.toLocaleString('pt-BR');
+const nf = n => Math.max(0, n).toLocaleString('pt-BR');
 
-function buildScenes(){
-  const d = dailyMinutes, y = d * 365;
+function buildScenes() {
+  const d = dailyMinutes;
+  const y = d * 365;
+
   scenes = [
-    { text: 'Você dedica <span class="font-display text-6xl sm:text-7xl font-semibold countup block mt-4">' + fmt(d) + '</span> por dia às telas.' },
-    { text: 'Isso representa <span class="font-display text-6xl sm:text-7xl font-semibold block mt-4">' + fmtH(d * 7) + '</span> por semana.' },
-    { text: 'Aproximadamente <span class="font-display text-6xl sm:text-7xl font-semibold block mt-4">' + fmtH(d * 30) + '</span> por mês.' },
-    { text: 'Mais de <span class="font-display text-6xl sm:text-7xl font-semibold block mt-4">' + fmtH(y) + '</span> por ano.', hint: 'Isso é quase ' + nf(Math.round(y / 1440)) + ' dias inteiros por ano.' },
-    { text: '“Parece pouco, né?”', small: true },
-    { text: '“Então vamos transformar esse tempo em coisas que você consegue imaginar.”', small: true },
-    { text: 'Com esse tempo, você poderia ler aproximadamente <span class="font-semibold">' + nf(Math.floor(y / 8)) + ' livros</span>.', note: 'Estimativa: ~8 horas de leitura por livro.' },
-    { text: 'Poderia assistir a <span class="font-semibold">' + nf(Math.floor(y / 2)) + ' filmes</span>.', note: 'Estimativa: ~2 horas por semana.' },
-    { text: 'Poderia fazer <span class="font-semibold">' + nf(Math.floor(y / 1)) + ' caminhadas de uma hora</span>.', note: 'Estimativa: ~1 hora por sessão.' },
-    { text: 'Poderia dedicar <span class="font-semibold">' + fmtH(y / 2) + '</span> a um novo hobby ou projeto pessoal.', note: 'Aproximação.' },
-    { text: 'Ou aprender um idioma por <span class="font-semibold">' + fmtH(y / 3) + '</span> — o equivalente a vários anos de aulas semanais.', note: 'Estimativa.' },
-    { text: '“Agora parece pouco para você?”', small: true, pause: 2600, last: true }
+    {
+      text: 'Você dedica <span class="font-display text-6xl sm:text-7xl font-semibold countup block mt-4">' +
+        fmt(d) + '</span> por dia às telas.'
+    },
+    {
+      text: 'Isso representa <span class="font-display text-6xl sm:text-7xl font-semibold block mt-4">' +
+        fmtH(d * 7) + '</span> por semana.'
+    },
+    {
+      text: 'Aproximadamente <span class="font-display text-6xl sm:text-7xl font-semibold block mt-4">' +
+        fmtH(d * 30) + '</span> por mês.'
+    },
+    {
+      text: 'Mais de <span class="font-display text-6xl sm:text-7xl font-semibold block mt-4">' +
+        fmtH(y) + '</span> por ano.',
+      hint: 'Isso é quase ' + nf(Math.round(y / 1440)) +
+        ' dias inteiros por ano.'
+    },
+    {
+      text: '“Parece pouco, né?”',
+      small: true
+    },
+    {
+      text: '“Então vamos transformar esse tempo em coisas que você consegue imaginar.”',
+      small: true
+    },
+    {
+      text: 'Com esse tempo, você poderia ler aproximadamente <span class="font-semibold">' +
+        nf(Math.floor(y / 480)) + ' livros</span>.',
+      note: 'Estimativa: cerca de 8 horas de leitura por livro.'
+    },
+    {
+      text: 'Poderia assistir a <span class="font-semibold">' +
+        nf(Math.floor(y / 120)) + ' filmes</span>.',
+      note: 'Estimativa: cerca de 2 horas por filme.'
+    },
+    {
+      text: 'Poderia fazer <span class="font-semibold">' +
+        nf(Math.floor(y / 60)) + ' caminhadas de uma hora</span>.',
+      note: 'Estimativa: cerca de 1 hora por caminhada.'
+    },
+    {
+      text: 'Poderia dedicar <span class="font-semibold">' +
+        fmtH(y / 2) + '</span> a um novo hobby ou projeto pessoal.',
+      note: 'Aproximação.'
+    },
+    {
+      text: 'Ou aprender um idioma por <span class="font-semibold">' +
+        fmtH(y / 3) + '</span> — o equivalente a vários anos de aulas semanais.',
+      note: 'Estimativa.'
+    },
+    {
+      text: '“Agora parece pouco para você?”',
+      small: true,
+      pause: 2600,
+      last: true
+    }
   ];
 }
 
-function renderScene(i){
-  const stage = document.getElementById('story-stage');
+function renderScene(i) {
+  const stage = $('story-stage');
+  const hint = $('story-hint');
   const s = scenes[i];
-  const hint = document.getElementById('story-hint');
-  hint.textContent = s.last ? 'Toque para continuar' : (window.innerWidth < 768 ? 'Toque para continuar' : 'Clique ou pressione espaço');
-  stage.innerHTML = '<p class="font-display ' + (s.small ? 'text-3xl sm:text-4xl font-light' : 'text-2xl sm:text-3xl font-light') + ' leading-snug scene">' + s.text + '</p>' +
-    (s.hint ? '<p class="mt-6 text-clay text-sm scene">' + s.hint + '</p>' : '') +
-    (s.note ? '<p class="mt-6 text-xs text-clay scene">' + s.note + '</p>' : '');
+
+  if (!stage || !s) return;
+
+  if (sceneTimer) {
+    clearTimeout(sceneTimer);
+    sceneTimer = null;
+  }
+
+  if (hint) {
+    hint.textContent = window.innerWidth < 768
+      ? 'Toque para continuar'
+      : 'Clique ou pressione espaço';
+  }
+
+  stage.innerHTML =
+    '<p class="font-display ' +
+    (s.small
+      ? 'text-3xl sm:text-4xl font-light'
+      : 'text-2xl sm:text-3xl font-light') +
+    ' leading-snug scene">' + s.text + '</p>' +
+
+    (s.hint
+      ? '<p class="mt-6 text-clay text-sm scene">' + s.hint + '</p>'
+      : '') +
+
+    (s.note
+      ? '<p class="mt-6 text-xs text-clay scene">' + s.note + '</p>'
+      : '');
+
   requestAnimationFrame(() => {
     stage.querySelectorAll('.scene').forEach(el => {
-      el.style.opacity = 0; el.style.transform = 'translateY(24px)';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
       el.style.transition = 'opacity 1s ease, transform 1s ease';
-      requestAnimationFrame(() => { el.style.opacity = 1; el.style.transform = 'none'; });
+
+      requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
     });
   });
+
   renderDots();
-  if (s.pause) setTimeout(() => { if (sceneIndex === i) nextScene(); }, s.pause);
+
+  if (s.pause) {
+    sceneTimer = setTimeout(() => {
+      if (sceneIndex === i && !portalOpened) {
+        nextScene();
+      }
+    }, s.pause);
+  }
 }
 
-function renderDots(){
-  const dots = document.getElementById('story-dots');
+function renderDots() {
+  const dots = $('story-dots');
+  if (!dots) return;
+
   dots.innerHTML = scenes.map((_, i) =>
-    '<span class="w-2 h-2 rounded-full ' + (i <= sceneIndex ? 'bg-bark' : 'bg-sand/50') + '"></span>').join('');
+    '<span class="w-2 h-2 rounded-full ' +
+    (i <= sceneIndex ? 'bg-bark' : 'bg-sand/50') +
+    '"></span>'
+  ).join('');
 }
 
-function nextScene(){
+function nextScene() {
+  if (sceneLocked || portalOpened) return;
+
+  sceneLocked = true;
+
+  if (sceneTimer) {
+    clearTimeout(sceneTimer);
+    sceneTimer = null;
+  }
+
+  if (sceneIndex >= scenes.length - 1) {
+    endStory();
+    return;
+  }
+
   sceneIndex++;
-  if (sceneIndex >= scenes.length) return endStory();
   renderScene(sceneIndex);
+
+  sceneLockTimer = setTimeout(() => {
+    sceneLocked = false;
+    sceneLockTimer = null;
+  }, 350);
 }
 
-function endStory(){
-  const story = document.getElementById('s-story');
-  story.style.opacity = 0;
+function endStory() {
+  const story = $('s-story');
+  if (!story) return;
+
+  if (sceneTimer) {
+    clearTimeout(sceneTimer);
+    sceneTimer = null;
+  }
+
+  sceneLocked = true;
+  story.style.opacity = '0';
+
   setTimeout(() => {
     if (portalOpened) return;
+
     story.classList.add('screen-hidden');
     story.style.opacity = '';
+
     show('s-brand');
     brandReveal();
   }, 700);
 }
 
-function brandReveal(){
+function brandReveal() {
   if (portalOpened) return;
-  const brand = document.getElementById('s-brand');
+
+  clearBrandTimers();
+
+  const brand = $('s-brand');
+  if (!brand) return;
+
   const els = brand.querySelectorAll('.reveal');
-  els.forEach((el, i) => setTimeout(() => el.classList.add('in'), 400 + i * 500));
-  setTimeout(openPortal, 3800);
+
+  els.forEach((el, i) => {
+    const timer = setTimeout(() => {
+      el.classList.add('in');
+    }, 400 + i * 500);
+
+    brandTimers.push(timer);
+  });
+
+  brandTimers.push(setTimeout(openPortal, 3800));
 }
 
-function openPortal(){
+function openPortal() {
   if (portalOpened) return;
+
   portalOpened = true;
+
   clearSplashTimers();
+  clearSceneTimers();
+  clearBrandTimers();
+
   removeSplash(false);
   show(null);
-  const brand = document.getElementById('s-brand');
-  brand.classList.add('screen-hidden');
-  const story = document.getElementById('s-story');
-  story.classList.add('screen-hidden');
-  story.style.opacity = '';
-  const portal = document.getElementById('portal');
-  portal.classList.remove('hidden');
-  document.getElementById('site-header').classList.remove('opacity-0','pointer-events-none');
-  const footer = document.getElementById('site-footer');
-  footer.classList.remove('hidden');
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    portal.classList.remove('opacity-0');
-    footer.classList.remove('opacity-0');
-  }));
+
+  const brand = $('s-brand');
+  const story = $('s-story');
+  const portal = $('portal');
+  const header = $('site-header');
+  const footer = $('site-footer');
+
+  brand?.classList.add('screen-hidden');
+  story?.classList.add('screen-hidden');
+
+  if (story) story.style.opacity = '';
+
+  if (portal) {
+    portal.classList.remove('hidden');
+  }
+
+  header?.classList.remove('opacity-0', 'pointer-events-none');
+  footer?.classList.remove('hidden');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      portal?.classList.remove('opacity-0');
+      footer?.classList.remove('opacity-0');
+    });
+  });
+
   window.scrollTo({ top: 0 });
+
   fillEntenda();
   initReveal();
   initDesafio();
 }
 
-function fillEntenda(){
+function fillEntenda() {
   if (!dailyMinutes) return;
-  document.getElementById('entenda-empty').classList.add('hidden');
-  const grid = document.getElementById('entenda-grid');
-  const note = document.getElementById('entenda-note');
+
+  const empty = $('entenda-empty');
+  const grid = $('entenda-grid');
+  const note = $('entenda-note');
+
+  if (!grid) return;
+
+  empty?.classList.add('hidden');
+
   const d = dailyMinutes;
-  const items = [['Por dia', fmt(d)], ['Por semana', fmtH(d * 7)], ['Por mês', fmtH(d * 30)], ['Por ano', fmtH(d * 365)]];
-  grid.innerHTML = items.map(([label, val]) =>
-    '<div class="bg-linen border border-sand/40 rounded-2xl p-6 reveal"><p class="text-xs uppercase tracking-widest text-clay">' + label + '</p><p class="mt-2 font-display text-3xl font-semibold">' + val + '</p></div>').join('');
+
+  const items = [
+    ['Por dia', fmt(d)],
+    ['Por semana', fmtH(d * 7)],
+    ['Por mês', fmtH(d * 30)],
+    ['Por ano', fmtH(d * 365)]
+  ];
+
+  grid.innerHTML = items.map(([label, value]) =>
+    '<div class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">' +
+      '<p class="text-xs uppercase tracking-widest text-clay">' +
+        label +
+      '</p>' +
+      '<p class="mt-2 font-display text-3xl font-semibold">' +
+        value +
+      '</p>' +
+    '</div>'
+  ).join('');
+
   grid.classList.remove('hidden');
-  note.classList.remove('hidden');
-  grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  note?.classList.remove('hidden');
+
+  grid.querySelectorAll('.reveal').forEach(el => {
+    if (revealObserver) revealObserver.observe(el);
+  });
 }
 
-function restartExperience(){
-  if (!portalOpened) return;
-  location.hash = '';
-  sceneIndex = -1;
+function restartExperience() {
+  clearSceneTimers();
+  clearBrandTimers();
+
+  portalOpened = false;
+  sceneIndex = 0;
+
   buildScenes();
-  const story = document.getElementById('s-story');
-  story.classList.remove('screen-hidden');
-  story.style.opacity = 1;
+
+  const portal = $('portal');
+  const header = $('site-header');
+  const footer = $('site-footer');
+  const story = $('s-story');
+  const brand = $('s-brand');
+
+  portal?.classList.add('hidden', 'opacity-0');
+  header?.classList.add('opacity-0', 'pointer-events-none');
+  footer?.classList.add('hidden', 'opacity-0');
+
+  brand?.classList.remove('screen-hidden');
+
+  if (story) {
+    story.classList.remove('screen-hidden');
+    story.style.opacity = '1';
+  }
+
+  show('s-story');
   renderScene(0);
-  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 }
 
-const revealObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObserver.unobserve(e.target); } });
-}, { threshold: 0.15 });
+let revealObserver = null;
 
-function initReveal(){
-  document.querySelectorAll('#portal .reveal').forEach(el => revealObserver.observe(el));
+if ('IntersectionObserver' in window) {
+  revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+}
+
+function initReveal() {
+  if (!revealObserver) {
+    document.querySelectorAll('#portal .reveal')
+      .forEach(el => el.classList.add('in'));
+    return;
+  }
+
+  document.querySelectorAll('#portal .reveal').forEach(el => {
+    revealObserver.observe(el);
+  });
 }
 
 const desafioSteps = [
@@ -187,92 +458,178 @@ const desafioSteps = [
   'Compare seu comportamento com o primeiro dia.'
 ];
 
-function initDesafio(){
-  const box = document.getElementById('desafio');
-  box.innerHTML = desafioSteps.map((t, i) =>
+function initDesafio() {
+  const box = $('desafio');
+  if (!box) return;
+
+  box.innerHTML = desafioSteps.map((text, i) =>
     '<label class="flex items-start gap-4 bg-linen border border-sand/40 rounded-xl p-4 cursor-pointer hover:bg-cream transition-colors">' +
-    '<input type="checkbox" class="mt-1 w-5 h-5 accent-[#4A2E1F]"><span><span class="text-xs uppercase tracking-widest text-clay">Dia ' + (i+1) + '</span><span class="block text-sm text-cocoa">' + t + '</span></span></label>').join('');
+      '<input type="checkbox" class="mt-1 w-5 h-5 accent-[#4A2E1F]">' +
+      '<span>' +
+        '<span class="text-xs uppercase tracking-widest text-clay">Dia ' +
+          (i + 1) +
+        '</span>' +
+        '<span class="block text-sm text-cocoa">' +
+          text +
+        '</span>' +
+      '</span>' +
+    '</label>'
+  ).join('');
 }
 
-document.getElementById('btn-start').addEventListener('click', () => show('s-input'));
-document.getElementById('btn-skip').addEventListener('click', openPortal);
-document.getElementById('btn-confirm').addEventListener('click', () => {
+// Navegação inicial
+bind('btn-start', 'click', () => {
+  show('s-input');
+});
+
+bind('btn-skip', 'click', openPortal);
+
+bind('btn-confirm', 'click', () => {
   const m = parseTime();
-  if (m <= 0 || m > 1440) { document.getElementById('input-error').classList.remove('hidden'); return; }
-  document.getElementById('input-error').classList.add('hidden');
+  const error = $('input-error');
+
+  if (m <= 0 || m > 1440) {
+    error?.classList.remove('hidden');
+    return;
+  }
+
+  error?.classList.add('hidden');
+
   dailyMinutes = m;
-  document.getElementById('check-time').textContent = fmt(m);
+
+  const checkTime = $('check-time');
+  if (checkTime) checkTime.textContent = fmt(m);
+
   show('s-check');
 });
-document.getElementById('btn-fix').addEventListener('click', () => show('s-input'));
-document.getElementById('btn-yes').addEventListener('click', () => {
+
+bind('btn-fix', 'click', () => {
+  show('s-input');
+});
+
+bind('btn-yes', 'click', () => {
   if (portalOpened) return;
-  sceneIndex = -1;
+
+  clearSceneTimers();
+
+  sceneIndex = 0;
   buildScenes();
-  show(null);
-  const story = document.getElementById('s-story');
-  story.classList.remove('screen-hidden');
-  story.style.opacity = 1;
+
+  show('s-story');
+
+  const story = $('s-story');
+  if (story) story.style.opacity = '1';
+
   renderScene(0);
 });
 
-document.getElementById('s-story').addEventListener('click', e => {
+// Avançar cenas com clique
+bind('s-story', 'click', e => {
   if (e.target.closest('button')) return;
   nextScene();
 });
+
+// Avançar cenas com espaço
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && !document.getElementById('s-story').classList.contains('screen-hidden')) {
-    e.preventDefault(); nextScene();
+  const story = $('s-story');
+  const active = document.activeElement;
+
+  if (
+    e.code === 'Space' &&
+    story &&
+    !story.classList.contains('screen-hidden') &&
+    !['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT'].includes(active?.tagName)
+  ) {
+    e.preventDefault();
+    nextScene();
   }
 });
 
-document.getElementById('plan-form').addEventListener('submit', e => {
+// Planejamento
+bind('plan-form', 'submit', e => {
   e.preventDefault();
-  const obj = document.getElementById('p-obj').value.trim();
-  const quanto = document.getElementById('p-quanto').value.trim();
-  const per = document.getElementById('p-per').value;
-  const lugar = document.getElementById('p-lugar').value.trim();
-  const err = document.getElementById('plan-error');
-  if (!obj || !quanto || !lugar) { err.classList.remove('hidden'); return; }
-  err.classList.add('hidden');
-  document.getElementById('r-obj').textContent = obj;
-  document.getElementById('r-quanto').textContent = quanto;
-  document.getElementById('r-per').textContent = per;
-  document.getElementById('r-lugar').textContent = lugar;
-  const res = document.getElementById('plan-result');
-  res.classList.remove('hidden');
-  res.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  const obj = $('p-obj')?.value.trim() || '';
+  const quanto = $('p-quanto')?.value.trim() || '';
+  const per = $('p-per')?.value || '';
+  const lugar = $('p-lugar')?.value.trim() || '';
+  const err = $('plan-error');
+
+  if (!obj || !quanto || !lugar) {
+    err?.classList.remove('hidden');
+    return;
+  }
+
+  err?.classList.add('hidden');
+
+  if ($('r-obj')) $('r-obj').textContent = obj;
+  if ($('r-quanto')) $('r-quanto').textContent = quanto;
+  if ($('r-per')) $('r-per').textContent = per;
+  if ($('r-lugar')) $('r-lugar').textContent = lugar;
+
+  const result = $('plan-result');
+  result?.classList.remove('hidden');
+
+  result?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
 });
 
-const burger = document.getElementById('burger'), menu = document.getElementById('mobile-menu');
-burger.addEventListener('click', () => {
-  const open = menu.classList.toggle('hidden') === false;
-  burger.setAttribute('aria-expanded', open);
-});
-menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  menu.classList.add('hidden'); burger.setAttribute('aria-expanded', 'false');
-}));
+// Menu mobile
+const burger = $('burger');
+const menu = $('mobile-menu');
 
-function startIntro(){
-  const sp = document.getElementById('splash');
-  if (!sp) { show('s-welcome'); return; }
-  splashTimers.push(setTimeout(() => sp.classList.add('open'), 200));
-  // Libera a tela inicial junto com a abertura, sem depender de clique ou teclado
+if (burger && menu) {
+  burger.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('hidden') === false;
+    burger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      burger.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+// Abertura do site
+function startIntro() {
+  const splash = $('splash');
+
+  if (!splash) {
+    show('s-welcome');
+    return;
+  }
+
+  splashTimers.push(setTimeout(() => {
+    splash.classList.add('open');
+  }, 200));
+
   splashTimers.push(setTimeout(() => {
     if (portalOpened) return;
+
     removeSplash(false);
     show('s-welcome');
   }, 2800));
-  // Clique na abertura pula direto para o início
-  sp.addEventListener('click', () => {
+
+  splash.addEventListener('click', () => {
     if (portalOpened) return;
+
     clearSplashTimers();
     removeSplash(true);
     show('s-welcome');
   });
 }
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', startIntro);
-} else {
+
+// Inicialização
+function initApp() {
   startIntro();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
 }
