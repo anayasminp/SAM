@@ -11,7 +11,7 @@ function clearSplashTimers(){
 function removeSplash(instant){
   const sp = document.getElementById('splash');
   if (!sp) return;
-  // Garante que a abertura nunca bloqueie cliques no conteúdo abaixo
+  
   sp.classList.add('pointer-events-none');
   if (instant) { sp.remove(); return; }
   sp.style.transition = 'opacity 0.7s ease, visibility 0.7s';
@@ -58,7 +58,7 @@ function buildScenes(){
     { text: '“Parece pouco, né?”', small: true },
     { text: '“Então vamos transformar esse tempo em coisas que você consegue imaginar.”', small: true },
     { text: 'Com esse tempo, você poderia ler aproximadamente <span class="font-semibold">' + nf(Math.floor(y / 8)) + ' livros</span>.', note: 'Estimativa: ~8 horas de leitura por livro.' },
-    { text: 'Poderia participar de alguns <span class="font-semibold">' + nf(Math.floor(y / 2)) + ' projetos sociais</span>.', note: 'Estimativa: ~2 horas por semana.' },
+    { text: 'Poderia assistir a <span class="font-semibold">' + nf(Math.floor(y / 2)) + ' filmes</span>.', note: 'Estimativa: ~2 horas por semana.' },
     { text: 'Poderia fazer <span class="font-semibold">' + nf(Math.floor(y / 1)) + ' caminhadas de uma hora</span>.', note: 'Estimativa: ~1 hora por sessão.' },
     { text: 'Poderia dedicar <span class="font-semibold">' + fmtH(y / 2) + '</span> a um novo hobby ou projeto pessoal.', note: 'Aproximação.' },
     { text: 'Ou aprender um idioma por <span class="font-semibold">' + fmtH(y / 3) + '</span> — o equivalente a vários anos de aulas semanais.', note: 'Estimativa.' },
