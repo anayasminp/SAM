@@ -51,7 +51,7 @@ tailwind.config = {
   </symbol>
 </svg>
 
-  <div id="splash" class="splash fixed inset-0 z-50 bg-linen flex items-center justify-center transition-opacity duration-700">
+<div id="splash" class="splash fixed inset-0 z-50 bg-linen flex items-center justify-center transition-opacity duration-700">
   <div class="eye-logo text-bark w-24 h-24 md:w-28 md:h-28 absolute left-1/2 -translate-x-1/2">
     <svg viewBox="0 0 64 64" class="w-full h-full" role="img" aria-label="SAM — olho com pupila de celular">
       <clipPath id="eyeClip"><path d="M6 38 C16 22, 48 22, 58 38 C48 54, 16 54, 6 38 Z"/></clipPath>
@@ -72,7 +72,6 @@ tailwind.config = {
 </div>
 
 <div id="app" class="relative min-h-screen">
-
   <header id="site-header" class="fixed top-0 inset-x-0 z-40 bg-linen/90 backdrop-blur border-b border-sand/40 opacity-0 transition-opacity duration-700 pointer-events-none">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
       <a href="#portal-hero" class="flex items-center gap-2.5 text-bark">
@@ -113,9 +112,7 @@ tailwind.config = {
   </header>
 
   <main class="relative">
-
     <section id="experiencia-top" class="min-h-screen flex flex-col items-center justify-center px-6 relative">
-
       <div id="s-welcome" class="screen max-w-2xl text-center flex flex-col items-center">
         <div class="text-bark w-10 h-10 mb-10"><svg class="w-full h-full"><use href="#logo-eye"/></svg></div>
         <h1 class="font-display text-3xl sm:text-4xl md:text-5xl leading-tight font-light">“Você controla seu tempo de tela ou seu tempo de tela controla você?”</h1>
@@ -160,11 +157,9 @@ tailwind.config = {
         <p class="mt-2 text-clay text-sm uppercase tracking-widest reveal">Sistema de Amparo à Mente</p>
         <p class="mt-10 font-display text-xl sm:text-2xl font-light reveal">“Agora que você percebeu seu tempo, vamos entender o que ele significa.”</p>
       </div>
-
     </section>
 
     <div id="portal" class="opacity-0 transition-opacity duration-1000 hidden">
-
       <section id="portal-hero" class="pt-28 pb-20 px-6">
         <div class="max-w-6xl mx-auto">
           <p class="text-xs text-clay uppercase tracking-widest mb-4">Início / Bem-vindo</p>
@@ -214,7 +209,7 @@ tailwind.config = {
             <article class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
               <h3 class="mt-4 font-semibold">SONO</h3>
-              <p class="mt-2 text-sm text-cocoa leading-relaxed">O uso de dispositivos no período que antecede o sono pode se associar a horários mais tardios para dormir. O tipo de atividade e o horário importam tanto quanto a duração.</p>
+              <p class="mt-2 text-sm text-cocoa leading-relaxed">O uso de dispositivos no período que antecede o sono pode estar associado a horários mais tardios para dormir. O tipo de atividade e o horário importam tanto quanto a duração.</p>
             </article>
             <article class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
@@ -223,8 +218,8 @@ tailwind.config = {
             </article>
             <article class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21C7 17 3 13.5 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-9 12z"/></svg>
-              <h3 class="mt-4 font-semibold">RELAÇOES E BEM-ESTAR</h3>
-              <p class="mt-2 text-sm text-cocoa leading-relaxed">Longos períodos conectados podem competir com convivência, movimento e momentos de descanso. Observar esses espaços ajuda a compreender o próprio equilíbrio.</p>
+              <h3 class="mt-4 font-semibold">RELAÇÕES E BEM-ESTAR</h3>
+              <p class="mt-2 text-sm text-cocoa leading-relaxed">Longos períodos conectados podem competir com a convivência, o movimento e os momentos de descanso. Observar esses espaços ajuda a compreender o próprio equilíbrio.</p>
             </article>
             <article class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2 12h4l3-8 4 16 3-8h6"/></svg>
@@ -257,8 +252,8 @@ tailwind.config = {
           </div>
           <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
             <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Notificações</h3><p class="mt-1 text-sm text-sand">Convites para retornar à tela, mesmo sem uma decisão consciente.</p></div>
-            <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Rolagem infinita</h3><p class="mt-1 text-sm text-sand">Feeds que não têm fim natural podem favorecer sessões prolongadas.</p></div>
-            <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Autoplay</h3><p class="mt-1 text-sm text-sand">Reprodução automática reduz a pausa entre uma escolha e a próxima.</p></div>
+            <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Rolagem infinita</h3><p class="mt-1 text-sm text-sand">Feeds que não têm um fim natural podem favorecer sessões prolongadas.</p></div>
+            <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Reprodução automática</h3><p class="mt-1 text-sm text-sand">A reprodução automática reduz a pausa entre uma escolha e a próxima.</p></div>
             <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Recomendações</h3><p class="mt-1 text-sm text-sand">Sistemas sugerem conteúdos com base nas suas interações anteriores.</p></div>
             <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Recompensas sociais</h3><p class="mt-1 text-sm text-sand">Curtidas e respostas funcionam como sinais que convidam a verificar novamente.</p></div>
             <div class="bg-cocoa/40 rounded-2xl p-5 reveal"><h3 class="font-semibold">Vídeos curtos</h3><p class="mt-1 text-sm text-sand">Conteúdos rápidos e variados facilitam a alternância constante.</p></div>
@@ -271,7 +266,7 @@ tailwind.config = {
         <div class="max-w-6xl mx-auto">
           <p class="text-xs text-clay uppercase tracking-widest mb-4">Início / Como reduzir</p>
           <h2 class="font-display text-3xl md:text-4xl font-light reveal">Quer experimentar uma mudança? Comece pequeno.</h2>
-          <p class="mt-4 text-cocoa max-w-2xl reveal">Tecnologia não precisa desaparecer da sua vida. A questão é entender o espaço que ela ocupa.</p>
+          <p class="mt-4 text-cocoa max-w-2xl reveal">A tecnologia não precisa desaparecer da sua vida. A questão é entender o espaço que ela ocupa.</p>
           <div class="mt-10 grid lg:grid-cols-3 gap-5">
             <div class="bg-cream/70 rounded-2xl p-7 reveal">
               <h3 class="font-display text-xl font-semibold">COMECE PEQUENO</h3>
@@ -279,14 +274,14 @@ tailwind.config = {
                 <li>Desative notificações desnecessárias</li>
                 <li>Retire aplicativos da tela inicial</li>
                 <li>Estabeleça horários sem redes sociais</li>
-                <li>Evite o celular automático nas pausas</li>
+                <li>Evite pegar o celular automaticamente durante as pausas</li>
               </ul>
             </div>
             <div class="bg-cream/70 rounded-2xl p-7 reveal">
               <h3 class="font-display text-xl font-semibold">MUDE O AMBIENTE</h3>
               <ul class="mt-4 space-y-2 text-sm text-cocoa list-disc list-inside">
-                <li>Deixe o celular longe em certas atividades</li>
-                <li>Evite o aparelho ao lado da cama</li>
+                <li>Deixe o celular longe durante certas atividades</li>
+                <li>Evite deixar o aparelho ao lado da cama</li>
                 <li>Crie espaços sem telas em casa</li>
                 <li>Organize a tela inicial</li>
               </ul>
@@ -294,21 +289,21 @@ tailwind.config = {
             <div class="bg-cream/70 rounded-2xl p-7 reveal">
               <h3 class="font-display text-xl font-semibold">SUBSTITUA, NÃO APENAS CORTE</h3>
               <ul class="mt-4 space-y-2 text-sm text-cocoa list-disc list-inside">
-                <li>Caminhar, conversar, ler</li>
-                <li>Desenhar, cozinhar, tocar instrumento</li>
-                <li>Praticar esporte</li>
-                <li>Criar algo com as próprias mãos</li>
+                <li>Caminhe, converse e leia</li>
+                <li>Desenhe, cozinhe ou toque um instrumento</li>
+                <li>Pratique esportes</li>
+                <li>Crie algo com as próprias mãos</li>
               </ul>
             </div>
           </div>
           <div class="mt-10 grid md:grid-cols-2 gap-5">
             <div class="border border-sand/50 rounded-2xl p-7 reveal">
               <h3 class="font-semibold">NEM TODA TECNOLOGIA É O PROBLEMA</h3>
-              <p class="mt-2 text-sm text-cocoa">Estudar, programar, pesquisar, criar arte, editar vídeos, aprender idiomas e acessar serviços também acontecem nas telas. A pergunta pode ser: “que lugar a tecnologia ocupa na minha vida?”</p>
+              <p class="mt-2 text-sm text-cocoa">Estudar, programar, pesquisar, criar arte, editar vídeos, aprender idiomas e acessar serviços também são atividades realizadas nas telas. A pergunta pode ser: “Que lugar a tecnologia ocupa na minha vida?”</p>
             </div>
             <div class="border border-sand/50 rounded-2xl p-7 reveal">
               <h3 class="font-semibold">CRIANÇAS E ADOLESCENTES</h3>
-              <p class="mt-2 text-sm text-cocoa">Conteúdo, contexto, rotina e acompanhamento importam mais do que uma única regra de horas. Referência: material oficial do Gov.br sobre uso de telas por crianças e adolescentes.</p>
+              <p class="mt-2 text-sm text-cocoa">O conteúdo, o contexto, a rotina e o acompanhamento importam mais do que uma única regra de horas. Referência: material oficial do Gov.br sobre o uso de telas por crianças e adolescentes.</p>
             </div>
           </div>
         </div>
@@ -318,7 +313,7 @@ tailwind.config = {
         <div class="max-w-3xl mx-auto">
           <p class="text-xs text-clay uppercase tracking-widest mb-4">Início / Meu plano</p>
           <h2 class="font-display text-3xl md:text-4xl font-light reveal">Crie seu plano</h2>
-          <p class="mt-4 text-cocoa reveal">O objetivo não é uma rotina perfeita. É transformar uma intenção em algo observável. Suas informações ficam apenas no seu dispositivo.</p>
+          <p class="mt-4 text-cocoa reveal">O objetivo não é ter uma rotina perfeita. É transformar uma intenção em algo observável. Suas informações ficam apenas no seu dispositivo.</p>
           <form id="plan-form" class="mt-8 space-y-5 reveal" novalidate>
             <div>
               <label for="p-obj" class="block text-sm font-medium mb-1.5">O que você quer mudar?</label>
@@ -366,9 +361,9 @@ tailwind.config = {
           <p class="text-xs text-clay uppercase tracking-widest mb-4">Início / Curiosidades</p>
           <h2 class="font-display text-3xl md:text-4xl font-light reveal">Você sabia?</h2>
           <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="bg-cream/70 rounded-2xl p-6 reveal"><h3 class="font-semibold">O TEMPO SE ACUMULA</h3><p class="mt-2 text-sm text-cocoa">Pequenas quantidades repetidas todos os dias representam muitas horas ao longo de semanas e meses.</p><p class="mt-3 text-xs text-clay">Observação matemática — SAM</p></div>
-            <div class="bg-cream/70 rounded-2xl p-6 reveal"><h3 class="font-semibold">O CONTEXTO IMPORTA</h3><p class="mt-2 text-sm text-cocoa">O mesmo número de horas pode representar atividades completamente diferentes dependendo da pessoa e da situação.</p><p class="mt-3 text-xs text-clay">Gov.br — Guia sobre uso de telas</p></div>
-            <div class="bg-cream/70 rounded-2xl p-6 reveal"><h3 class="font-semibold">O HÁBITO PODE SER AUTOMÁTICO</h3><p class="mt-2 text-sm text-cocoa">Às vezes abrimos um aplicativo sem ter decidido previamente o que pretendíamos fazer.</p><p class="mt-3 text-xs text-clay">Gov.br — economia da atenção</p></div>
+            <div class="bg-cream/70 rounded-2xl p-6 reveal"><h3 class="font-semibold">O TEMPO SE ACUMULA</h3><p class="mt-2 text-sm text-cocoa">Pequenos períodos repetidos todos os dias representam muitas horas ao longo de semanas e meses.</p><p class="mt-3 text-xs text-clay">Observação matemática — SAM</p></div>
+            <div class="bg-cream/70 rounded-2xl p-6 reveal"><h3 class="font-semibold">O CONTEXTO IMPORTA</h3><p class="mt-2 text-sm text-cocoa">O mesmo número de horas pode representar atividades completamente diferentes, dependendo da pessoa e da situação.</p><p class="mt-3 text-xs text-clay">Gov.br — Guia sobre uso de telas</p></div>
+            <div class="bg-cream/70 rounded-2xl p-6 reveal"><h3 class="font-semibold">O HÁBITO PODE SER AUTOMÁTICO</h3><p class="mt-2 text-sm text-cocoa">Às vezes, abrimos um aplicativo sem ter decidido previamente o que pretendíamos fazer.</p><p class="mt-3 text-xs text-clay">Gov.br — Economia da atenção</p></div>
           </div>
         </div>
       </section>
@@ -379,7 +374,7 @@ tailwind.config = {
           <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div class="reveal">
               <h2 class="font-display text-3xl md:text-4xl font-light leading-tight">Para pais: limitar sem proibir</h2>
-              <p class="mt-6 text-cocoa leading-relaxed">Acompanhar o tempo de tela de filhos, crianças e adolescentes não precisa significar proibições. O diálogo, os limites combinados e o exemplo dos adultos costumam funcionar melhor do que regras impostas de um lado só.</p>
+              <p class="mt-6 text-cocoa leading-relaxed">Acompanhar o tempo de tela dos filhos, sejam crianças ou adolescentes, não precisa significar proibições. O diálogo, os limites combinados e o exemplo dos adultos costumam funcionar melhor do que regras impostas de um lado só.</p>
             </div>
             <div class="reveal">
               <img src="https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=1000&q=80" alt="Pais e filho conversando em um ambiente acolhedor de casa" class="rounded-3xl w-full object-cover aspect-[4/3] shadow-lg shadow-sand/30">
@@ -389,11 +384,11 @@ tailwind.config = {
             <div class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 10h8M8 14h5M21 12a9 9 0 1 1-4-7.5L21 3l-1 4.5"/></svg>
               <h3 class="mt-4 font-semibold">CONVERSE ANTES DE LIMITAR</h3>
-              <p class="mt-2 text-sm text-cocoa">Explique o porquê dos combinados. Crianças e adolescentes participam melhor de regras que entendem e ajudaram a construir.</p>
+              <p class="mt-2 text-sm text-cocoa">Explique o motivo dos combinados. Crianças e adolescentes participam melhor de regras que entendem e ajudaram a construir.</p>
             </div>
             <div class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-              <h3 class="mt-4 font-semibold">COMBITEM HORÁRIOS JUNTOS</h3>
+              <h3 class="mt-4 font-semibold">COMBINEM HORÁRIOS JUNTOS</h3>
               <p class="mt-2 text-sm text-cocoa">Definam em conjunto momentos com e sem telas — como durante as refeições e antes de dormir — em vez de apenas cortar o acesso.</p>
             </div>
             <div class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
@@ -404,12 +399,12 @@ tailwind.config = {
             <div class="bg-linen border border-sand/40 rounded-2xl p-6 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21C7 17 3 13.5 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-9 12z"/></svg>
               <h3 class="mt-4 font-semibold">VALORIZE O CONTEÚDO</h3>
-              <p class="mt-2 text-sm text-cocoa">O que a criança assiste e com quem interage importa tanto quanto quanto tempo dura. Acompanhe, pergunte e participe.</p>
+              <p class="mt-2 text-sm text-cocoa">O que a criança assiste e com quem interage importa tanto quanto o tempo que passa diante das telas. Acompanhe, pergunte e participe.</p>
             </div>
           </div>
           <div class="mt-10 bg-linen border border-sand/50 rounded-2xl p-7 reveal">
             <h3 class="font-semibold">QUANDO PROCURAR AJUDA ESPECIALIZADA?</h3>
-            <p class="mt-2 text-sm text-cocoa">Se o uso de telas estiver atrapalhando sono, escola, convivência ou o humor da criança ou adolescente de forma persistente, converse com um pediatra, psicólogo ou a escola. Pedir ajuda não é sinal de fracasso — é um cuidado. O Gov.br oferece um guia oficial sobre uso de telas por crianças e adolescentes que pode apoiar essa conversa.</p>
+            <p class="mt-2 text-sm text-cocoa">Se o uso de telas estiver atrapalhando o sono, a escola, a convivência ou o humor da criança ou do adolescente de forma persistente, converse com um pediatra, psicólogo ou com a escola. Pedir ajuda não é sinal de fracasso — é um cuidado. O Gov.br oferece um guia oficial sobre o uso de telas por crianças e adolescentes que pode apoiar essa conversa.</p>
           </div>
         </div>
       </section>
@@ -420,7 +415,7 @@ tailwind.config = {
           <div class="text-center max-w-3xl mx-auto reveal">
             <div class="text-cocoa w-12 h-12 mx-auto"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="w-full h-full"><path d="M12 21C7 17 3 13.5 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-9 12z"/></svg></div>
             <h2 class="mt-4 font-display text-3xl md:text-4xl font-light">O SAM informa, e os profissionais cuidam.</h2>
-            <p class="mt-4 text-cocoa">Este site é uma ferramenta educativa — ele não substitui, em nenhuma hipótese, o acompanhamento de psicólogos, psiquiatras e outros profissionais de saúde mental. Se você sente que o uso de tecnologia está afetando seu sono, humor, relações ou rotina, buscar apoio humano especializado é sempre o melhor caminho.</p>
+            <p class="mt-4 text-cocoa">Este site é uma ferramenta educativa — ele não substitui, em nenhuma hipótese, o acompanhamento de psicólogos, psiquiatras e outros profissionais de saúde mental. Se você sente que o uso da tecnologia está afetando seu sono, humor, relações ou rotina, buscar apoio humano especializado é sempre o melhor caminho.</p>
           </div>
           <div class="mt-12 grid md:grid-cols-3 gap-5">
             <div class="bg-cream/70 border border-sand/40 rounded-2xl p-7 reveal">
@@ -436,7 +431,7 @@ tailwind.config = {
             <div class="bg-cream/70 border border-sand/40 rounded-2xl p-7 reveal">
               <svg class="w-8 h-8 text-cocoa" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
               <h3 class="mt-4 font-display text-xl font-semibold">APOIO PARA FAMÍLIAS</h3>
-              <p class="mt-2 text-sm text-cocoa">Terapia familiar e orientação profissional ajudam pais e filhos a construir combinados saudáveis de uso de tecnologia — juntos.</p>
+              <p class="mt-2 text-sm text-cocoa">A terapia familiar e a orientação profissional ajudam pais e filhos a construir, juntos, combinados saudáveis para o uso da tecnologia.</p>
             </div>
           </div>
           <div class="mt-12 grid md:grid-cols-2 gap-5">
@@ -451,11 +446,11 @@ tailwind.config = {
                 <li>Busque profissionais registrados no conselho da categoria (CRP para psicólogos)</li>
                 <li>Verifique se há atendimento pelo SUS na sua cidade</li>
                 <li>Escolas e universidades costumam oferecer apoio psicológico</li>
-                <li>Plataformas de terapia online também conectam a profissionais registrados</li>
+                <li>Plataformas de terapia on-line também conectam você a profissionais registrados</li>
               </ul>
             </div>
           </div>
-          <p class="mt-10 text-center text-sm text-clay reveal"><strong>Lembre-se: pedir ajuda é um ato de cuidado. Apoio humano especializado sempre vale mais do que qualquer ferramenta digital.</strong></p>
+          <p class="mt-10 text-center text-sm text-clay reveal"><strong>Lembre-se: pedir ajuda é um ato de cuidado. O apoio humano especializado sempre vale mais do que qualquer ferramenta digital.</strong></p>
         </div>
       </section>
 
@@ -470,14 +465,14 @@ tailwind.config = {
             <li class="bg-linen border border-sand/40 rounded-xl p-5"><span class="font-semibold">UNICEF</span><br><span class="text-cocoa">Materiais sobre infância, adolescência e ambiente digital seguro.</span><br><a href="https://www.unicef.org/brazil" class="underline underline-offset-4 text-clay hover:text-bark">Acessar fonte</a></li>
             <li class="bg-linen border border-sand/40 rounded-xl p-5"><span class="font-semibold">Ministério da Saúde</span><br><span class="text-cocoa">Informações de saúde pública relacionadas a hábitos e bem-estar.</span><br><a href="https://www.gov.br/saude" class="underline underline-offset-4 text-clay hover:text-bark">Acessar fonte</a></li>
           </ul>
-          <p class="mt-6 text-xs text-clay reveal">As comparações da experiência são aproximações baseadas em durações médias estimadas (ex.: livro ≈ 8h, filme ≈ 2h, caminhada ≈ 1h) e não representam verdades universais. Este projeto é educativo e não constitui diagnóstico.</p>
+          <p class="mt-6 text-xs text-clay reveal">As comparações da experiência são aproximações baseadas em durações médias estimadas (ex.: livro ≈ 8 h, filme ≈ 2 h, caminhada ≈ 1 h) e não representam verdades universais. Este projeto é educativo e não constitui diagnóstico.</p>
         </div>
       </section>
 
       <section id="sobre" class="py-20 px-6">
         <div class="max-w-4xl mx-auto">
           <h2 class="font-display text-3xl md:text-4xl font-light reveal">Sobre o SAM</h2>
-          <p class="mt-4 text-cocoa reveal">O SAM — Sistema de Amparo à Mente — é um projeto de informação e conscientização sobre a relação entre pessoas, tecnologia, tempo e bem-estar. A proposta: informar primeiro, refletir depois e deixar a decisão nas mãos de cada pessoa.</p>
+          <p class="mt-4 text-cocoa reveal">O SAM — Sistema de Amparo à Mente — é um projeto de informação e conscientização sobre a relação entre pessoas, tecnologia, tempo e bem-estar. A proposta é informar primeiro, refletir depois e deixar a decisão nas mãos de cada pessoa.</p>
           <div class="mt-8 grid sm:grid-cols-3 gap-5 text-sm reveal">
             <div class="border border-sand/40 rounded-2xl p-6"><h3 class="font-semibold">Objetivo</h3><p class="mt-2 text-cocoa">Ampliar o acesso a informações sobre bem-estar digital e hábitos tecnológicos.</p></div>
             <div class="border border-sand/40 rounded-2xl p-6"><h3 class="font-semibold">Metodologia</h3><p class="mt-2 text-cocoa">Conteúdo construído a partir de referências confiáveis e apresentado de forma acessível.</p></div>
@@ -491,7 +486,6 @@ tailwind.config = {
           </div>
         </div>
       </section>
-
     </div>
   </main>
 
